@@ -18,7 +18,7 @@ resource "yandex_compute_instance" "zabbix" {
     }
 
     network_interface {
-        subnet_id = "${yandex_vpc_subnet.subnet-zabbix.id}"
+        subnet_id = "${yandex_vpc_subnet.subnet-public.id}"
         nat = true
     }
 
