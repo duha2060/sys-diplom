@@ -31,12 +31,16 @@ resource "yandex_compute_instance" "app01" {
   }
 
   network_interface {
-    subnet_id = "${yandex_vpc_subnet.subnet-app01.id}"
-    nat = true
+    subnet_id = yandex_vpc_subnet.subnet-app01.id
+    security_group_ids = [yandex_vpc_security_group.private-group.id, yandex_vpc_security_group.bastion-group.id]
   }
 
   metadata = {
     user-data = file("./meta.yml")
+  }
+
+  scheduling_policy {
+    preemptible = true
   }
 }
 
@@ -60,10 +64,14 @@ resource "yandex_compute_instance" "app02" {
   }
 
   network_interface {
-    subnet_id = "${yandex_vpc_subnet.subnet-app02.id}"
-    nat = true
+    subnet_id = yandex_vpc_subnet.subnet-app02.id
+    security_group_ids = [yandex_vpc_security_group.private-group.id, yandex_vpc_security_group.bastion-group.id]
   }
   metadata = {
     user-data = file("./meta.yml")
+  }
+
+  scheduling_policy {
+    preemptible = true
   }
 }

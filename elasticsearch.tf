@@ -1,13 +1,13 @@
 resource "yandex_compute_instance" "elasticsearch" {
   name = "elasticsearch"
-  allow_stopping_for_update = true
+  hostname = "elasticsearch"
   platform_id = "standard-v2"
-  zone = "ru-central1-b"
+  zone = "ru-central1-a"
 
   resources {
     cores = 2
     core_fraction = 20
-    memory = 2
+    memory = 6
   }
 
   boot_disk {
@@ -18,10 +18,14 @@ resource "yandex_compute_instance" "elasticsearch" {
   }
 
   network_interface {
-    subnet_id = "${yandex_vpc_subnet.subnet-private.id}"
-    nat = true
+    subnet_id = yandex_vpc_subnet.subnet-private.id
+    security_group_ids = [yandex_vpc_security_group.private-group.id]
   }
   metadata = {
     user-data = file("./meta.yml")
+  }
+  
+  scheduling_policy {
+    preemptible = true
   }
 }

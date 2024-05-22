@@ -1,8 +1,9 @@
 resource "yandex_compute_instance" "kibana" {
     name = "kibana"
-    allow_stopping_for_update = true
+    hostname = "kibana"
     platform_id = "standard-v2"
     zone = "ru-central1-d"
+    allow_stopping_for_update = true
 
     resources {
         cores = 2
@@ -18,11 +19,16 @@ resource "yandex_compute_instance" "kibana" {
     }
 
     network_interface {
-        subnet_id = "${yandex_vpc_subnet.subnet-public.id}"
+        subnet_id = yandex_vpc_subnet.subnet-public.id
+        nat = true
+        security_group_ids = [yandex_vpc_security_group.private-group.id, yandex_vpc_security_group.kibana.id]
     }
 
     metadata = {
         user-data = file("./meta.yml")
+    }
+    scheduling_policy {
+        preemptible = true
     }
 }
 
