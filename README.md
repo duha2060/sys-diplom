@@ -80,10 +80,14 @@ kibana: http://158.160.141.15:5601
 
 Настройте ВМ с публичным адресом, в которой будет открыт только один порт — ssh.  Эта вм будет реализовывать концепцию  [bastion host]( https://cloud.yandex.ru/docs/tutorials/routing/bastion) . Синоним "bastion host" - "Jump host". Подключение  ansible к серверам web и Elasticsearch через данный bastion host можно сделать с помощью  [ProxyCommand](https://docs.ansible.com/ansible/latest/network/user_guide/network_debug_troubleshooting.html#network-delegate-to-vs-proxycommand) . Допускается установка и запуск ansible непосредственно на bastion host.(Этот вариант легче в настройке)
 
-![image](https://github.com/duha2060/sys-diplom/assets/80347708/f3e3d0a6-49d3-4458-9e73-e1ff4403df9f)
-
 Используется сеть network-1
 ![image](https://github.com/duha2060/sys-diplom/assets/80347708/4b2cf6c8-9141-4e32-a2b7-ae96b9a05bd9)
+
+![image](https://github.com/duha2060/sys-diplom/assets/80347708/48f72a10-4417-4820-9ad9-bd6833552ba8)
+
+![image](https://github.com/duha2060/sys-diplom/assets/80347708/1147359f-b13d-466e-b300-40c1110afa05)
+
+
 
 
 ### Резервное копирование
