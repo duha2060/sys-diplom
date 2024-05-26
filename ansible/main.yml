@@ -1,0 +1,21 @@
+---
+- name: Configure Zabbix
+  hosts: zabbix
+  roles:
+    - zabbix
+
+- name: Configure Elastic
+  hosts: elastic
+  roles:
+    - elastic
+
+- name: Configure Kibana
+  hosts: kibana
+  roles:
+    - kibana
+
+- name: Configure Web Servers
+  hosts: web
+  roles:
+    - web
+    - filebeat
