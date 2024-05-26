@@ -68,12 +68,23 @@ Cоздайте ВМ, разверните на ней Elasticsearch. Устан
 
 Создайте ВМ, разверните на ней Kibana, сконфигурируйте соединение с Elasticsearch.
 
+kibana: http://158.160.141.15:5601
+
+![image](https://github.com/duha2060/sys-diplom/assets/80347708/58c7506c-d97d-4010-8f86-a73978a91831)
+
+
 ### Сеть
 Разверните один VPC. Сервера web, Elasticsearch поместите в приватные подсети. Сервера Zabbix, Kibana, application load balancer определите в публичную подсеть.
 
 Настройте [Security Groups](https://cloud.yandex.com/docs/vpc/concepts/security-groups) соответствующих сервисов на входящий трафик только к нужным портам.
 
 Настройте ВМ с публичным адресом, в которой будет открыт только один порт — ssh.  Эта вм будет реализовывать концепцию  [bastion host]( https://cloud.yandex.ru/docs/tutorials/routing/bastion) . Синоним "bastion host" - "Jump host". Подключение  ansible к серверам web и Elasticsearch через данный bastion host можно сделать с помощью  [ProxyCommand](https://docs.ansible.com/ansible/latest/network/user_guide/network_debug_troubleshooting.html#network-delegate-to-vs-proxycommand) . Допускается установка и запуск ansible непосредственно на bastion host.(Этот вариант легче в настройке)
+
+![image](https://github.com/duha2060/sys-diplom/assets/80347708/f3e3d0a6-49d3-4458-9e73-e1ff4403df9f)
+
+Используется сеть network-1
+![image](https://github.com/duha2060/sys-diplom/assets/80347708/4b2cf6c8-9141-4e32-a2b7-ae96b9a05bd9)
+
 
 ### Резервное копирование
 Создайте snapshot дисков всех ВМ. Ограничьте время жизни snaphot в неделю. Сами snaphot настройте на ежедневное копирование.
