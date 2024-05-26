@@ -1,6 +1,8 @@
 ---
 - name: Configure Zabbix
   hosts: zabbix
+  vars:   
+    mysql_password: 'mysecretpass'
   roles:
     - zabbix
 
