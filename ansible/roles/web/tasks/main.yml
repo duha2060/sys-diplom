@@ -15,25 +15,25 @@
   ansible.builtin.file:
     path: /etc/nginx/sites-enabled/default
     state: absent
-  notify: restart nginx
+  notify: Reload Nginx
 
 - name: Copy custom config
-  ansible.builtin.copy:
-    src: ./config/nginx.conf
-    dest: /etc/nginx/
-  notify: restart nginx
+  template:
+    src: nginx.conf.j2
+    dest: /etc/nginx/nginx.conf
+  notify: Reload Nginx
 
- name: Copy nginx site.conf
- ansible.builtin.template:
-   src: site.conf.j2
-   dest: /etc/nginx/sites-enabled/{{ domain }}
-   owner: root
-   group: root
-   mode: '0644'
- notify: restart nginx
+- name: Copy nginx site.conf
+  template:
+    src: site.conf.j2
+    dest: /etc/nginx/sites-enabled/{{ domain }}
+    owner: root
+    group: root
+    mode: '0644'
 
 - name: Copy website
   ansible.builtin.copy:
     src: index.html
     dest: /var/www/{{ domain }}
+  notify: Reload Nginx
         

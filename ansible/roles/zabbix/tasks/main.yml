@@ -10,22 +10,24 @@
     state: present 
 
 - name: copy zabbix_server configuration
-  ansible.builtin.copy:
-      src: zabbix_server.conf.j2
-      dest: /etc/zabbix/zabbix_server.conf
-      owner: root
-      group: root
-      mode: '0644'
-      backup: yes
+  #ansible.builtin.copy:
+  template:
+    src: zabbix_server.conf.j2
+    dest: /etc/zabbix/zabbix_server.conf
+    owner: root
+    group: root
+    mode: '0644'
+    backup: yes
 
 - name: copy nginx configuration
-  ansible.builtin.copy:
-      src: nginx.conf.j2
-      dest: /etc/zabbix/nginx.conf
-      owner: root
-      group: root
-      mode: '0644'
-      backup: yes  
+  #ansible.builtin.copy:
+  template:
+    src: nginx.conf.j2
+    dest: /etc/zabbix/nginx.conf
+    owner: root
+    group: root
+    mode: '0644'
+    backup: yes  
 
 - name: Install PyMySQL
   pip:
@@ -34,49 +36,49 @@
 
 - name: Create Db
   community.mysql.mysql_db:
-      login_host: zabbix
-      name: zabbix
-      state: present
-      login_unix_socket: /run/mysqld/mysqld.sock 
+    login_host: zabbix
+    name: zabbix
+    state: present
+    login_unix_socket: /run/mysqld/mysqld.sock 
     
 - name: Create User 
   community.mysql.mysql_user:
-      login_host: zabbix
-      name: zabbix
-      password: '{{mysql_password}}'
-      priv: '*.*:ALL,GRANT'
-      state: present 
-      login_unix_socket: /run/mysqld/mysqld.sock 
+    login_host: zabbix
+    name: zabbix
+    password: '{{mysql_password}}'
+    priv: '*.*:ALL,GRANT'
+    state: present 
+    login_unix_socket: /run/mysqld/mysqld.sock 
     
 - name: grant zabbix.
   community.mysql.mysql_query:
-     login_host: zabbix
-     login_db: zabbix
-     query: 
-     - grant all privileges on zabbix.* to zabbix@localhost
-     - set global log_bin_trust_function_creators = 1
-     login_unix_socket: /run/mysqld/mysqld.sock   
+    login_host: zabbix
+    login_db: zabbix
+    query: 
+    - grant all privileges on zabbix.* to zabbix@localhost
+    - set global log_bin_trust_function_creators = 1
+    login_unix_socket: /run/mysqld/mysqld.sock   
     
-- name: create sql shema
-  community.mysql.mysql_db: 
-     name: zabbix 
-     state: import 
-     target: /usr/share/zabbix-sql-scripts/mysql/server.sql.gz 
-     login_unix_socket: /run/mysqld/mysqld.sock
-    
-- name: log_bin_trust_function_creators
-  community.mysql.mysql_query:
-     login_db: zabbix
-     query: set global log_bin_trust_function_creators = 0
-     login_unix_socket: /run/mysqld/mysqld.sock 
+#- name: create sql shema
+#  community.mysql.mysql_db: 
+#    name: zabbix 
+#    state: import 
+#    target: /usr/share/zabbix-sql-scripts/mysql/server.sql.gz 
+#    login_unix_socket: /run/mysqld/mysqld.sock
+#    
+#- name: log_bin_trust_function_creators
+#  community.mysql.mysql_query:
+#    login_db: zabbix
+#    query: set global log_bin_trust_function_creators = 0
+#    login_unix_socket: /run/mysqld/mysqld.sock 
         
 - name: restart
   ansible.builtin.systemd:
-      name: '{{ item }}'
-      enabled: yes
-      state: restarted 
+    name: '{{ item }}'
+    enabled: yes
+    state: restarted 
   with_items:
-      - zabbix-server
-      - zabbix-agent 
-      - nginx
-      - php8.1-fpm
+    - zabbix-server
+    - zabbix-agent 
+    - nginx
+    - php8.1-fpm
