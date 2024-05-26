@@ -2,7 +2,8 @@
 - name: install elastic
   ansible.builtin.apt:
     deb: "https://ftp.yandex.ru/mirrors/elastic/7/pool/main/e/elasticsearch/elasticsearch-7.17.14-amd64.deb"
-
+    state: present
+    
 - name: Copy Elasticsearch configuration
   template:
     src: elasticsearch.yml.j2

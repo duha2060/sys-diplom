@@ -2,13 +2,7 @@
 - name: install kibana
   ansible.builtin.apt:
     deb: "https://ftp.yandex.ru/mirrors/elastic/7/pool/main/k/kibana/kibana-7.17.14-amd64.deb"
-
-- name: Install Kibana
-  apt:
-    name: kibana
     state: present
-  notify:
-    - Restart Kibana
 
 - name: Copy Kibana configuration
   template:
